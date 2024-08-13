@@ -6,6 +6,8 @@ import base64
 import json
 import os
 from dotenv import load_dotenv
+import tkinter as tk
+from tkinter import font as tkfont
 
 load_dotenv()
 # ... [previous code remains the same] ...
@@ -139,9 +141,49 @@ solution_payload = {
 solution_response = requests.post(openai_url, headers=openai_headers, json=solution_payload)
 solution_result = solution_response.json()
 
-# Print the solution
+
+def display_solution(solution_text):
+        # Create the main window
+        root = tk.Tk()
+        root.title("Math Problem Solution")
+        
+        # Set the window size and position it in the center of the screen
+        window_width = 400
+        window_height = 200
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        x = (screen_width // 2) - (window_width // 2)
+        y = (screen_height // 2) - (window_height // 2)
+        root.geometry(f'{window_width}x{window_height}+{x}+{y}')
+        
+        # Create a custom font for big text
+        big_font = tkfont.Font(family="Helvetica", size=24, weight="bold")
+        
+        # Create and pack a label with the solution text
+        solution_label = tk.Label(root, text=solution_text, font=big_font, wraplength=380)
+        solution_label.pack(expand=True)
+        
+        # Start the GUI event loop
+        root.mainloop()
+
 if 'choices' in solution_result:
     solution = solution_result['choices'][0]['message']['content'].strip()
     print("Solution:", solution)
+    
+    # Create a popup window to display the solution
+    
+    
+    # Call the function to display the solution
+    display_solution(solution)
 else:
     print("Could not solve the problem:", solution_result)
+    
+    # Display an error message in the popup if the solution couldn't be found
+    display_solution("Error: Could not solve the problem.")
+
+# Print the solution
+# if 'choices' in solution_result:
+#     solution = solution_result['choices'][0]['message']['content'].strip()
+#     print("Solution:", solution)
+# else:
+#     print("Could not solve the problem:", solution_result)
